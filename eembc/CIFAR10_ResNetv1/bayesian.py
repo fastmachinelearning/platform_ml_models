@@ -65,14 +65,19 @@ def main(args):
     tuner = tunerClass(
         build_model,
         objective='val_accuracy',
+<<<<<<< HEAD
+        max_trials=10,  #100,  
+        project_name='bo_resnet_v1_eembc_10epoch_100maxtrials_lrdecay',
+=======
         max_trials=args.max_trials,
         project_name=args.project_dir,
         hyperparameters=hp,
+>>>>>>> 1e9a46aafdbc1b8152ca5c2b7acf86de61c184f4
         overwrite=True)
 
     datagen.fit(X_train)
 
-    print(tuner.search_space_summary())
+    print("Here is the summary: \n", tuner.search_space_summary())
 
     from tensorflow.keras.callbacks import LearningRateScheduler
     lr_schedule_func = get_lr_schedule_func(0.001, 0.99)

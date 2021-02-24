@@ -46,6 +46,28 @@ def main(args):
         tuners.append(tuner)
 
     import kerop
+<<<<<<< HEAD
+    num = 20 #100
+    for trial, model, hp in zip(tuner.oracle.get_best_trials(num_trials=num), 
+                                tuner.get_best_models(num_models=num), 
+                                tuner.get_best_hyperparameters(num_trials=num)):
+        metrics_tracker = trial.metrics # type: MetricsTracker
+        metric_histories = metrics_tracker.metrics # type: Dict[str, MetricHistory]
+        val_accuracy_hist = metric_histories['val_accuracy'] # type: MetricHistory
+        val_acc = val_accuracy_hist.get_history()[0].value[0]
+        #val_acc = model.evaluate(X_test, y_test)[1] # save time by skipping this
+        layer_name, layer_flops, inshape, weights = kerop.profile(model)
+        total_flop = 0
+        for name, flop, shape in zip(layer_name, layer_flops, inshape):
+            total_flop += flop
+
+        result = hp.values
+        result['val_acc'] = val_acc
+        result['flops'] = total_flop
+        print(result)
+        for key in result:
+            results[key].append(result[key])
+=======
     for tuner in tuners:
         for trial, model, hp in zip(tuner.oracle.get_best_trials(num_trials=args.max_trials), 
                                     tuner.get_best_models(num_models=args.max_trials), 
@@ -69,6 +91,7 @@ def main(args):
     # change to numpy array for easier indexing
     for key in result:
         results[key] = np.array(results[key])
+>>>>>>> 1e9a46aafdbc1b8152ca5c2b7acf86de61c184f4
 
     import matplotlib.pyplot as plt
     import mplhep as hep
